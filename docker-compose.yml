@@ -1,0 +1,28 @@
+version: '3.8'
+
+# docker-compose:
+# config file which runs all the services (e.g. postgres, my application, kafka) in different containers
+
+# Start using:
+# docker compose up -d
+# docker ps (to see the running containers)
+# docker logs ride_postgres
+# docker compose down
+
+services: # services which make up the application
+  postgres:
+    image: postgres:16    # specifies the official postgres docker image to use
+    container_name: ride_postgres
+    environment:          # environment variables for the container
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: rides  # name of default database to be created
+    ports:
+      - "5432:5432"       # maps port 5432 on host to port 5432 in container (allows my machine to connect to container)
+    volumes:              # how to persist data (if container is removed, db persisted on host)
+      - pgdata:/var/lib/postgresql/data # creates a volume called pgdata on my host and mounts it to /var/lib/postgresql/data in the container
+    restart: unless-stopped
+
+
+volumes:
+  pgdata:

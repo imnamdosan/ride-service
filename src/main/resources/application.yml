@@ -1,0 +1,5 @@
+# The config file which Spring Boot reads from
+# e.g. database URLs, ports, credentials, Kafka, Redis
+# It's like a settings file for your application
+
+# Spring will load these properties and inject them into application context
