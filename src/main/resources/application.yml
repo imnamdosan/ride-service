@@ -3,3 +3,51 @@
 # It's like a settings file for your application
 
 # Spring will load these properties and inject them into application context
+# You can create multiple application.yml files for each flavour: e.g. application-dev.yml
+# Allows you to keep credentials and connection info out of your code
+
+spring:
+  datasource:
+    # How Spring can connect to Postgres (Connect to Postgres container on local machine and open DB called rides)
+    url: jdbc:postgresql://localhost:5433/rides
+    username: postgres
+    password: postgres
+    # The Java driver which communicates with Postgres (comes from the org.postgresql:postgresql dependency)
+    driver-class-name: org.postgresql.Driver
+
+  # JPA = Java Persistence API - a set of rules which specify how Java objects are stored in relational DBs tables
+  # Allows you to save/query entities
+
+  # Spring JPA calls this other framework called Hibernate
+  # Hibernate = ORM (Object Relational Mapping) library
+  # Maps Kotlin/Java classes/objects to actual DB tables
+  # e.g. when we have a Ride(id, riderId, pickup...) class in code, Hibernate maps it into SQL queries
+  # like INSERT INTO rides (id, riderId...) VALUES...
+  # so you don't have to write SQL yourself and just work with objects in memory
+  jpa:
+    hibernate:
+      # How Hibernate handles the DB schema
+      # If you're letting Flyway manage your schema, 'validate' is recommended
+      ddl-auto: validate # Checks that existing DB matches entity definitions
+    properties:
+      hibernate:
+        format_sql: true # Pretty printing to console
+    show-sql: true       # Logs queries as they're executed
+
+  # Flyway = DB migration tool which version controls your DB schema (like Git)
+  # There's a flyway_schema_history table which tracks the migrations which have already been applied
+  # On application startup, it runs the scripts which haven't been run before in src/main/resources/db/migration
+  # Finds all the SQL scripts in src/main/resources/db/migration/ and runs them in order
+  # when the app is launched
+  flyway:
+    enabled: true # Tell Spring to run Flyway migrations on startup
+    baseline-on-migrate: true # If DB is non-empty: creates a baseline so it doesn't rerun old migrations
+
+logging:
+  level:
+    com.zaxxer.hikari: DEBUG
+    org.flywaydb.core.internal.command.DbMigrate: DEBUG
+
+# The port for my application's HTTP server. REST API listens to this port
+server:
+  port: 8080
