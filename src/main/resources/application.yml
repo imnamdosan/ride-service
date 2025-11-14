@@ -43,6 +43,10 @@ spring:
     enabled: true # Tell Spring to run Flyway migrations on startup
     baseline-on-migrate: true # If DB is non-empty: creates a baseline so it doesn't rerun old migrations
 
+  test:
+    database:
+      replace: none # DataJpaTest doesn't use in-memory database, uses Postgres
+
 logging:
   level:
     com.zaxxer.hikari: DEBUG
