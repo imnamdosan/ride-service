@@ -1,0 +1,5 @@
+ALTER TABLE rides
+    ALTER COLUMN pickup TYPE VARCHAR(200);
+
+ALTER TABLE rides
+    ALTER COLUMN destination TYPE VARCHAR(200);

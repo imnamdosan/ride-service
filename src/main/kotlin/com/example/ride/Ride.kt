@@ -1,6 +1,8 @@
 package com.example.ride
 
 import jakarta.persistence.*
+import jakarta.validation.constraints.NotEmpty
+import jakarta.validation.constraints.Size
 import java.time.OffsetDateTime
 import java.util.*
 
@@ -8,17 +10,21 @@ import java.util.*
 @Table(name = "rides")
 class Ride(
     @Id
+    @NotEmpty
     @Column(name = "id", nullable = false, updatable = false)
     val id: UUID = UUID.randomUUID(),
 
+    @NotEmpty
     @Column(name = "rider_id", nullable = false, length = 64)
     val riderId: String,
 
+    @NotEmpty
     @Column(name = "pickup", nullable = false, columnDefinition = "text")
-    var pickup: String,
+    val pickup: String,
 
+    @NotEmpty
     @Column(name = "destination", nullable = false, columnDefinition = "text")
-    var destination: String,
+    val destination: String,
 
     @Column(name = "status", nullable = false, length = 32)
     @Enumerated(EnumType.STRING)
