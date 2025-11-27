@@ -7,13 +7,8 @@
 # Allows you to keep credentials and connection info out of your code
 
 spring:
-  datasource:
-    # How Spring can connect to Postgres (Connect to Postgres container on local machine and open DB called rides)
-    url: jdbc:postgresql://localhost:5433/rides
-    username: postgres
-    password: postgres
-    # The Java driver which communicates with Postgres (comes from the org.postgresql:postgresql dependency)
-    driver-class-name: org.postgresql.Driver
+  application:
+    name: ride-service
 
   # JPA = Java Persistence API - a set of rules which specify how Java objects are stored in relational DBs tables
   # Allows you to save/query entities
@@ -43,10 +38,6 @@ spring:
     enabled: true # Tell Spring to run Flyway migrations on startup
     baseline-on-migrate: true # If DB is non-empty: creates a baseline so it doesn't rerun old migrations
 
-
-  test:
-    database:
-      replace: none # DataJpaTest doesn't use in-memory database, uses Postgres
   data:
     web:
       pageable:
@@ -60,20 +51,23 @@ spring:
 
   # How the application communicates with Kafka
   kafka:
-    bootstrap_servers: localhost:9092
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.apache.kafka.common.serialization.JsonSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
     consumer:
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.apache.kafka.common.serialization.JsonDeserializer
-      group-id: ride_service
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      group-id: ride_service_consumers
+      properties:
+        spring.json.trusted.packages: "com.example.ride.*"
 
-logging:
-  level:
-    com.zaxxer.hikari: DEBUG
-    org.flywaydb.core.internal.command.DbMigrate: DEBUG
+  profiles:
+    active: dev
 
 # The port for my application's HTTP server. REST API listens to this port
 server:
   port: 8080
+
+kafka:
+  topics:
+    rideRequests: ride-requests

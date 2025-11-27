@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    # How Spring can connect to Postgres (Connect to Postgres container on local machine and open DB called rides)
+    url: jdbc:postgresql://localhost:5433/rides
+    username: postgres
+    password: postgres
+    # The Java driver which communicates with Postgres (comes from the org.postgresql:postgresql dependency)
+    driver-class-name: org.postgresql.Driver
+
+  kafka:
+    # Brokers which the client will connect with via TCP to initialise Kafka
+    # Sends a MetadataRequest to the broker to obtain cluster metadata
+    # e.g. brokers in cluster, partition leaders, replicas, controller
+    # After obtaining the metadata, it will disconnect from the bootstrap server and
+    # depending on if the client is producing/consuming, it will connect directly with the partition leader for the topic
+    bootstrap-servers: localhost:9092
+
+logging:
+  level:
+    com.zaxxer.hikari: DEBUG
+    org.flywaydb.core.internal.command.DbMigrate: DEBUG

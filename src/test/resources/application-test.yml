@@ -1,0 +1,26 @@
+spring:
+  # No credentials needed since it's a test-container
+  datasource:
+    url: jdbc:tc:postgresql:15:///rides
+
+  # Create and drop DB data for each test-run
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+
+  test:
+    database:
+      replace: none # DataJpaTest doesn't use in-memory database, uses Postgres
+
+  kafka:
+    # Spins up and tears down fresh Docker container with Kafka
+    bootstrap-servers: ${spring.embedded.kafka.brokers}
+
+
+logging:
+  level:
+    com.zaxxer.hikari: DEBUG
+    org.flywaydb.core.internal.command.DbMigrate: DEBUG
+
+server:
+  port: 8080
